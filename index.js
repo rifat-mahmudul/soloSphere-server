@@ -15,7 +15,7 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-//?verify jwt middleware
+//verify jwt middleware
 const verifyToken = (req, res, next) => {
     const token = req.cookies?.token;
     if(!token){
@@ -105,20 +105,15 @@ async function run() {
         })
 
         //get all bids for a user by email
-        app.get('/my-bid/:email', verifyToken, async(req, res) => {
-            const tokenEmail = req.user.email;
+        app.get('/my-bid/:email', async(req, res) => {
             const email = req.params.email;
-
-            if(tokenEmail !== email){
-                return res.status(403).send({message : "forbidden access"})
-            }
             const query = {formEmail : email};
             const result = await bidsCollection.find(query).toArray();
             res.send(result)
         })
 
         //get all bids for buyer
-        app.get('/buyer-bid/:email', verifyToken, async(req, res) => {
+        app.get('/buyer-bid/:email', async(req, res) => {
             const email = req.params.email;
             const query = {buyer_Email : email};
             const result = await bidsCollection.find(query).toArray();
@@ -150,7 +145,7 @@ async function run() {
             const email = req.params.email;
 
             if(tokenEmail !== email){
-                return res.status(403).send({message : "forbidden access"})
+                return res.status(403).send({message : "unauthorized access"})
             }
 
             const query = {"buyer.email" : email}
