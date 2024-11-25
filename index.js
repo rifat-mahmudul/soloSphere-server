@@ -67,6 +67,18 @@ async function run() {
             res.send(result)
         })
 
+        //update Bid status
+        app.patch('/bid/:id', async(req, res) => {
+            const id = req.params.id;
+            const status = req.body;
+            const query = {_id : new ObjectId(id)}
+            const updateDoc = {
+                $set : status,
+            }
+            const result = await bidsCollection.updateOne(query, updateDoc)
+            res.send(result);
+        })
+
         //save a job data in DB
         app.post('/jobs', async (req, res) => {
             const jobData = req.body;
