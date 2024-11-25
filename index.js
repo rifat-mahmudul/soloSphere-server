@@ -51,6 +51,21 @@ async function run() {
             res.send(result);
         })
 
+        //get all bids for a user by email
+        app.get('/my-bid/:email', async(req, res) => {
+            const email = req.params.email;
+            const query = {formEmail : email};
+            const result = await bidsCollection.find(query).toArray();
+            res.send(result)
+        })
+
+        //get all bids for buyer
+        app.get('/buyer-bid/:email', async(req, res) => {
+            const email = req.params.email;
+            const query = {buyer_Email : email};
+            const result = await bidsCollection.find(query).toArray();
+            res.send(result)
+        })
 
         //save a job data in DB
         app.post('/jobs', async (req, res) => {
